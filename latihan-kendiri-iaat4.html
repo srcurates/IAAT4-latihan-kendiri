@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kancil Pintar — Latihan Kendiri IAAT4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --jungle-dark:#1B4332;
+    --jungle:#2D6A4F;
+    --leaf:#40916C;
+    --leaf-light:#95D5B2;
+    --cream:#FBF7ED;
+    --sun:#FFB703;
+    --coral:#FB8500;
+    --sky:#e9f5ee;
+    --danger:#e5533d;
+    --text:#1B2B24;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Nunito',sans-serif;
+    background: radial-gradient(circle at 10% 0%, #DFF3E4 0%, var(--sky) 45%, #F7F3E8 100%);
+    color:var(--text);
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:24px 14px 60px;
+  }
+  h1,h2,h3,.display{font-family:'Fredoka',sans-serif;}
+
+  /* ---------- Header ---------- */
+  .brand{
+    display:flex; align-items:center; gap:12px; margin-bottom:6px;
+  }
+  .brand .paw{
+    font-size:34px;
+    filter: drop-shadow(0 3px 0 rgba(0,0,0,0.08));
+  }
+  .brand h1{
+    font-size:30px; margin:0; color:var(--jungle-dark); letter-spacing:0.3px;
+  }
+  .tagline{color:var(--jungle); font-weight:700; margin-bottom:28px; text-align:center; font-size:15px;}
+
+  .wrap{width:100%; max-width:720px;}
+
+  /* ---------- Home / Paper picker ---------- */
+  .picker-grid{
+    display:grid; grid-template-columns:1fr; gap:16px; margin-top:8px;
+  }
+  @media(min-width:640px){ .picker-grid{grid-template-columns:1fr 1fr 1fr;} }
+
+  .paper-card{
+    background:#fff;
+    border-radius:20px;
+    padding:22px 18px;
+    box-shadow:0 10px 24px rgba(27,67,50,0.10);
+    border:3px solid transparent;
+    cursor:pointer;
+    text-align:center;
+    transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+    position:relative;
+    overflow:hidden;
+  }
+  .paper-card:hover{ transform:translateY(-4px); box-shadow:0 16px 30px rgba(27,67,50,0.18); border-color:var(--leaf-light); }
+  .paper-card:active{ transform:translateY(-1px) scale(.98); }
+  .paper-card .yr{
+    font-family:'Fredoka',sans-serif; font-size:34px; color:var(--jungle-dark); font-weight:700;
+  }
+  .paper-card .sub{ color:var(--leaf); font-weight:800; margin-top:2px; font-size:13px; text-transform:uppercase; letter-spacing:0.8px;}
+  .paper-card .qty{ margin-top:10px; font-size:13px; color:#5b6b62; font-weight:700;}
+  .paper-card .leafdecor{
+    position:absolute; top:-18px; right:-18px; font-size:70px; opacity:0.08; transform:rotate(15deg);
+  }
+  .best{
+    margin-top:10px; display:inline-block; background:var(--sky); color:var(--jungle-dark);
+    font-size:12px; font-weight:800; padding:4px 10px; border-radius:20px;
+  }
+
+  .mock-section{ margin-top:24px; }
+  .mock-card{
+    background:linear-gradient(135deg, var(--jungle-dark), var(--jungle));
+    border-radius:22px; padding:26px 24px; text-align:center; color:#fff;
+    box-shadow:0 12px 28px rgba(27,67,50,0.22);
+  }
+  .mock-icon{ font-size:38px; margin-bottom:4px; }
+  .mock-card h3{ margin:4px 0 6px; font-size:22px; }
+  .mock-card p{ font-weight:600; font-size:14px; opacity:0.92; margin:0 auto 14px; max-width:420px; line-height:1.5;}
+  .mock-controls{ display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; }
+  .mock-controls label{ font-weight:800; font-size:13.5px; }
+  .mock-controls select{
+    font-family:'Nunito',sans-serif; font-weight:700; font-size:14px; padding:8px 12px; border-radius:12px;
+    border:none; background:#fff; color:var(--jungle-dark); cursor:pointer;
+  }
+  #btn-mock{ background:var(--sun); color:var(--jungle-dark); box-shadow:0 6px 0 #d99a00; }
+  #btn-mock:hover{ background:#ffc733; }
+
+  .intro-card{
+    background:#fff; border-radius:20px; padding:22px; box-shadow:0 10px 24px rgba(27,67,50,0.08); margin-bottom:20px;
+  }
+  .intro-card p{ margin:6px 0; line-height:1.5; font-weight:600; color:#3c4a41; font-size:14.5px;}
+
+  /* ---------- Section badges ---------- */
+  .sec-pill{
+    display:inline-block; padding:6px 14px; border-radius:30px; font-weight:800; font-size:12.5px;
+    letter-spacing:0.4px; color:#fff; margin-bottom:14px;
+  }
+  .sec-BM{ background:var(--leaf); }
+  .sec-EN{ background:#3D8CB2; }
+  .sec-MATH{ background:var(--coral); }
+
+  /* ---------- Quiz screen ---------- */
+  .quiz-top{
+    display:flex; align-items:center; justify-content:space-between; width:100%; margin-bottom:14px; gap:10px;
+  }
+  .quit-btn{
+    background:#fff; border:2px solid #e2e2e2; color:#77827a; font-weight:800; font-size:13px;
+    padding:8px 14px; border-radius:14px; cursor:pointer;
+  }
+  .quit-btn:hover{ border-color:var(--coral); color:var(--coral); }
+  .score-chip{
+    background:var(--jungle-dark); color:#fff; font-weight:800; font-size:13px; padding:8px 14px; border-radius:14px;
+    display:flex; align-items:center; gap:6px;
+  }
+
+  .progress-track{
+    width:100%; height:12px; background:#e3ece5; border-radius:20px; overflow:hidden; margin-bottom:22px;
+    box-shadow:inset 0 1px 3px rgba(0,0,0,0.08);
+  }
+  .progress-fill{
+    height:100%; background:linear-gradient(90deg, var(--leaf), var(--sun));
+    border-radius:20px; transition:width .35s ease;
+  }
+
+  .question-card{
+    background:#fff; border-radius:22px; padding:26px 22px; box-shadow:0 12px 28px rgba(27,67,50,0.10);
+  }
+  .qnum{ font-size:13px; color:#8a978e; font-weight:800; margin-bottom:8px;}
+  .qtext{
+    font-size:19px; font-weight:800; color:var(--jungle-dark); line-height:1.4; margin-bottom:20px;
+  }
+  .qtext .visualnote{
+    display:block; font-size:12.5px; font-weight:700; color:var(--coral); margin-top:6px;
+  }
+
+  .options{ display:flex; flex-direction:column; gap:12px; }
+  .opt-btn{
+    display:flex; align-items:center; gap:12px;
+    text-align:left;
+    background:var(--cream);
+    border:2.5px solid #eee2c9;
+    border-radius:16px;
+    padding:14px 16px;
+    font-family:'Nunito',sans-serif;
+    font-weight:700;
+    font-size:15.5px;
+    color:var(--text);
+    cursor:pointer;
+    transition: all .12s ease;
+  }
+  .opt-btn:hover{ border-color:var(--sun); transform:translateX(2px); }
+  .opt-letter{
+    flex:0 0 30px; height:30px; border-radius:50%; background:#fff; border:2px solid #d8cca4;
+    display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; color:var(--jungle);
+  }
+  .opt-btn.selected{ border-color:var(--jungle); background:#eaf6ef; }
+  .opt-btn.selected .opt-letter{ background:var(--jungle); color:#fff; border-color:var(--jungle);}
+  .opt-btn.correct{ border-color:#2f9e58; background:#e4f8ea; }
+  .opt-btn.correct .opt-letter{ background:#2f9e58; color:#fff; border-color:#2f9e58; }
+  .opt-btn.wrong{ border-color:var(--danger); background:#fdecea; }
+  .opt-btn.wrong .opt-letter{ background:var(--danger); color:#fff; border-color:var(--danger); }
+  .opt-btn.disabled{ cursor:default; }
+  .opt-btn.disabled:hover{ transform:none; }
+
+  .feedback{
+    margin-top:16px; font-weight:800; font-size:14.5px; border-radius:14px; padding:12px 14px;
+    display:none;
+  }
+  .feedback.show{ display:block; }
+  .feedback.good{ background:#e4f8ea; color:#1f7a44; }
+  .feedback.bad{ background:#fdecea; color:#b23b2b; }
+
+  .nav-row{
+    display:flex; justify-content:space-between; align-items:center; margin-top:22px; gap:10px;
+  }
+  .btn{
+    font-family:'Fredoka',sans-serif;
+    font-weight:600;
+    font-size:15px;
+    border:none;
+    border-radius:16px;
+    padding:13px 22px;
+    cursor:pointer;
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:active{ transform:scale(.96); }
+  .btn-primary{ background:var(--jungle); color:#fff; box-shadow:0 6px 0 #1f5238; }
+  .btn-primary:hover{ background:var(--leaf); }
+  .btn-primary:disabled{ background:#bcd0c3; box-shadow:0 6px 0 #a4b7ab; cursor:not-allowed; }
+  .btn-ghost{ background:transparent; color:var(--jungle); border:2px solid var(--leaf-light); box-shadow:none;}
+  .btn-ghost:disabled{ opacity:0.35; cursor:not-allowed; }
+
+  /* ---------- Results screen ---------- */
+  .result-card{
+    background:#fff; border-radius:22px; padding:32px 24px; text-align:center; box-shadow:0 12px 28px rgba(27,67,50,0.12);
+  }
+  .result-emoji{ font-size:56px; }
+  .result-score{ font-family:'Fredoka',sans-serif; font-size:44px; color:var(--jungle-dark); margin:6px 0 2px;}
+  .result-msg{ font-weight:800; color:var(--leaf); font-size:16px; margin-bottom:18px;}
+  .result-bars{ display:flex; gap:10px; justify-content:center; margin:18px 0; flex-wrap:wrap;}
+  .result-tag{
+    background:var(--sky); border-radius:14px; padding:10px 16px; font-weight:800; font-size:13px; color:var(--jungle-dark);
+    min-width:96px;
+  }
+  .result-tag .big{ font-family:'Fredoka',sans-serif; font-size:22px; display:block; margin-bottom:2px;}
+  .result-actions{ display:flex; gap:12px; justify-content:center; margin-top:22px; flex-wrap:wrap;}
+
+  .review-list{ margin-top:26px; text-align:left; }
+  .review-item{
+    background:#fff; border-radius:16px; padding:16px; margin-bottom:12px; box-shadow:0 6px 16px rgba(27,67,50,0.06);
+    border-left:6px solid var(--leaf-light);
+  }
+  .review-item.wrong{ border-left-color:var(--danger); }
+  .review-item .rq{ font-weight:800; font-size:14.5px; color:var(--jungle-dark); margin-bottom:6px;}
+  .review-item .ra{ font-size:13.5px; font-weight:700; color:#4b5a52; }
+  .review-item .ra.wrongline{ color:var(--danger); }
+  .review-item .ra.rightline{ color:#1f7a44; }
+
+  footer{ margin-top:40px; font-size:12px; color:#95a39a; font-weight:700; text-align:center;}
+
+  .hidden{ display:none !important; }
+</style>
+</head>
+<body>
+
+<div class="brand">
+  <span class="paw">🦌</span>
+  <h1>Kancil Pintar</h1>
+</div>
+<div class="tagline">Latihan Kendiri IAAT4 — Latihan interaktif untuk murid Tahun 4</div>
+
+<div class="wrap">
+
+  <!-- ============ HOME SCREEN ============ -->
+  <div id="screen-home">
+    <div class="intro-card">
+      <p>👋 Hai! Pilih satu set latihan di bawah untuk bermula. Setiap set ada 80 soalan — Bahasa Malaysia, English &amp; Matematik/Penaakulan.</p>
+      <p>🌟 Jawab dengan menekan pilihan anda. Anda akan tahu terus sama ada jawapan betul atau salah!</p>
+    </div>
+    <div class="picker-grid" id="paper-grid"></div>
+
+    <div class="mock-section">
+      <div class="mock-card">
+        <div class="mock-icon">🎲</div>
+        <h3>Mock Exam Rawak</h3>
+        <p>Campurkan soalan daripada 2023, 2024 &amp; 2025 secara rawak — set baharu setiap kali!</p>
+        <div class="mock-controls">
+          <label for="mock-count">Bilangan soalan:</label>
+          <select id="mock-count">
+            <option value="20">20 soalan (ringkas)</option>
+            <option value="40">40 soalan</option>
+            <option value="60" selected>60 soalan</option>
+            <option value="80">80 soalan (penuh)</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" id="btn-mock" style="margin-top:14px;">Jana Mock Exam 🚀</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ QUIZ SCREEN ============ -->
+  <div id="screen-quiz" class="hidden">
+    <div class="quiz-top">
+      <button class="quit-btn" id="btn-quit">← Set lain</button>
+      <div class="score-chip">⭐ <span id="live-score">0</span> / <span id="live-total">0</span></div>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+
+    <div class="question-card">
+      <span class="sec-pill" id="sec-pill">BAHASA MALAYSIA</span>
+      <div class="qnum" id="qnum">Soalan 1 / 80</div>
+      <div class="qtext" id="qtext">Question text</div>
+      <div class="options" id="options"></div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-ghost" id="btn-prev">⬅ Sebelum</button>
+      <button class="btn btn-primary" id="btn-next" disabled>Seterusnya ➡</button>
+    </div>
+  </div>
+
+  <!-- ============ RESULT SCREEN ============ -->
+  <div id="screen-result" class="hidden">
+    <div class="result-card">
+      <div class="result-emoji" id="result-emoji">🏆</div>
+      <div class="result-score"><span id="result-score">0</span>/<span id="result-total">80</span></div>
+      <div class="result-msg" id="result-msg">Syabas!</div>
+      <div class="result-bars" id="result-bars"></div>
+      <div class="result-actions">
+        <button class="btn btn-primary" id="btn-review">Semak Jawapan 📝</button>
+        <button class="btn btn-ghost" id="btn-retry">Cuba Lagi 🔁</button>
+        <button class="btn btn-ghost" id="btn-home">Set Lain 🏠</button>
+      </div>
+    </div>
+    <div class="review-list hidden" id="review-list"></div>
+  </div>
+
+</div>
+
+<footer>Dicipta khas untuk latihan Tahun 4 · Kekalkan usaha, Kancil Pintar! 🌿</footer>
+
+<script>
+/* =====================================================================
+   DATA — each paper: array of [sectionCode, questionText, [4 options], correctIndex(0-3)]
+   sectionCode: BM | EN | MATH
+   ===================================================================== */
+
+const PAPERS = {
+"2023": [
+["BM","Pilih perkataan yang betul ejaannya.",["jaoh","hampiir","dekat","ringgang"],2],
+["BM","Pilih perkataan yang betul ejaannya.",["mahrah","chinta","kaseh","benci"],3],
+["BM","Pilih perkataan yang betul ejaannya.",["dheras","laju","chepat","phintas"],1],
+["BM","Pilih perkataan yang betul ejaannya.",["kure-kure","rame-rame","labi-labi","kupe-kupe"],2],
+["BM","Pilih perkataan yang salah ejaannya.",["biru","merah","kelabu","unggu"],3],
+["BM","Pilih perkataan yang salah ejaannya.",["kuceng","singa","harimau","anjing"],0],
+["BM","Pilih perkataan yang salah ejaannya.",["olih","sebab","ialah","iaitu"],0],
+["BM","Badan mempunyai maksud yang sama dengan ____.",["tangan","kaki","tubuh","kepala"],2],
+["BM","Cuci mempunyai maksud yang sama dengan ____.",["siram","semak","kotor","basuh"],3],
+["BM","Tengkujuh mempunyai maksud yang sama dengan ____.",["banjir","hujan","panas","sejuk"],1],
+["BM","Syurga adalah lawan neraka, manakala dosa adalah lawan ____.",["harapan","hukum","balasan","pahala"],3],
+["BM","Rindu adalah lawan benci, manakala suka adalah lawan ____.",["sayang","sayu","gembira","duka"],3],
+["BM","Gali adalah lawan timbus, manakala cabut adalah lawan ____.",["tebang","kambus","siram","tanam"],3],
+["BM","Pejam adalah lawan celik, manakala tidur adalah lawan ____.",["lena","mimpi","jaga","jegil"],2],
+["BM","Undur adalah lawan mara, manakala depan adalah lawan ____.",["atas","sisi","tepi","belakang"],3],
+["BM","Mati adalah lawan hidup, manakala tahniah adalah lawan ____.",["takziah","gembira","duka","ceria"],0],
+["BM","Tengkujuh adalah lawan kemarau, manakala surut adalah lawan ____.",["singkat","pasang","banjir","kering"],1],
+["BM","Pilih perkataan yang bukan dalam kumpulan yang sama.",["Betik","Nanas","Pisang","Epal"],3],
+["BM","Pilih perkataan yang bukan dalam kumpulan yang sama.",["Pen","Pensel","Pemadam","Krayon"],2],
+["BM","Pilih perkataan yang bukan dalam kumpulan yang sama.",["Sawi","Kobis","Rambai","Bayam"],2],
+["BM","Pilih perkataan yang bukan dalam kumpulan yang sama.",["Bulat","Besar","Bujur","Bundar"],1],
+["BM","Pilih perkataan yang bukan dalam kumpulan yang sama.",["Ibu","Bapa","Jiran","Anak"],2],
+["BM","Pilih perkataan yang bukan dalam kumpulan yang sama.",["Tidur","Makan","Minum","Kunyah"],0],
+["BM","Pilih perkataan yang bukan dalam kumpulan yang sama.",["Capal","Kasut","Selipar","Songkok"],3],
+["BM","Pilih perkataan yang bukan dalam kumpulan yang sama.",["Kereta","Sampan","Motosikal","Bas"],1],
+["BM","Petikan: Kelapa merupakan pokok serba guna. Batang kelapa boleh dijadikan titi. Buah kelapa dijadikan santan manakala daunnya dijadikan sarung ketupat dan tikar.\n\nSemua yang berikut merupakan hasil daripada kelapa kecuali ____.",["santan","titi","susu","tikar"],2],
+["BM","Sarung ketupat diperbuat daripada apa? (rujuk petikan kelapa)",["Sabut","Daun","Buah","Batang"],1],
+["BM","Petikan: Ibu Hanim mempunyai empat orang anak. Anak pertama bernama Hamim, kedua Hazim dan ketiga Haziq.\n\nSiapakah nama anak keempat ibu Hanim?",["Hamim","Hazim","Hashim","Hanim"],2],
+["BM","Petikan: Aminah mempunyai anak. Alif dan Arif merupakan anak lelaki Aminah. Alia pula anak perempuan Mariam dan Arif.\n\nAminah merupakan ____ kepada Alia.",["nenek","ibu","kakak","adik"],0],
+["BM","Siapakah bapa saudara Alia? (rujuk petikan Aminah)",["Arif","Alif","Aziz","Azif"],1],
+["EN","When you hear a funny joke you ____.",["shake","laugh","cry","run"],1],
+["EN","Jalur Gemilang has ____ stripes.",["sixteen","twelve","fifteen","fourteen"],3],
+["EN","It is ____ to walk in the park alone at night.",["unsafe","unwell","uncover","unwise"],0],
+["EN","It is a very hot day so the ice cream ____.",["melts","falls","spills","boils"],0],
+["EN","One, two, Buckle my shoe, Three, four, Knock at the ____.",["soar","oar","pour","door"],3],
+["EN","Which is not in the same group?",["Crayon","Basketball","Pencil","Pen"],1],
+["EN","How many days are in a week?",["5","6","7","8"],2],
+["EN","How many months are there in a year?",["12","13","14","15"],0],
+["EN","On a traffic light, what colour is the number 2?",["Red","Green","Yellow","Blue"],2],
+["EN","Which is not one of the five senses?",["Sight","Smell","Speech","Touch"],2],
+["EN","What is used to show time?",["Television","Oven","Clock","Radio"],2],
+["EN","What time is 1300 hours in the 24 hour system?",["1 p.m.","3 p.m.","5 p.m.","7 p.m."],0],
+["EN","Touch is to hand as taste is to ____.",["mouth","tongue","lip","ear"],1],
+["EN","The girl got dirty so ____.",["she ate the pie","she took a shower","she ran fast","she went to sleep"],1],
+["EN","It is hot so I ____.",["sleep","scream","cry","sweat"],3],
+["EN","The first meal of a day is ____.",["supper","lunch","breakfast","dinner"],2],
+["EN","Falling raindrops shaped like ____.",["teardrops","stars","sphere","triangle"],0],
+["EN","I took a shower so ____.",["my hair got wet","my pants are dirty","my comb is missing","my shirt got wrinkled"],0],
+["EN","Monkey → Bananas, so Lion → ?",["Nut","Meat","Sugarcane","Fruit"],1],
+["EN","Cow → Moo, so Sheep → ?",["Baa","Cluck","Meow","Hiss"],0],
+["EN","Herbivores → Leaves, so Carnivores → ?",["Rice","Meat","Cereal","Nut"],1],
+["EN","Veterinarian → Cats, so Dentist → ?",["Teeth","Skin","Hair","Bone"],0],
+["EN","Sunflower → Light, so which pair matches the same relationship?",["Torch : Battery","Scholar : Book","Ink : Print","Wood : Fire"],0],
+["EN","Fly, Bee, Wasp, ? — which continues the group?",["Buffalo","Fish","Beetle","Snake"],2],
+["EN","Which item doesn't belong in the group?",["Nurse","Mother","Daughter","Son"],0],
+["EN","Ravi's mother has three children. The first is Selvi and the second is Sanjeeta. What is the name of the third child?",["Raju","Ravi","Ramu","Sanjeeta"],1],
+["EN","A farmer has seventeen sheep and all but nine die. How many are left?",["Eleven","Ten","Nine","Eight"],2],
+["EN","First, I threw away the outside and cooked the inside. Then, I ate the outside and threw away the inside. What did I eat?",["corn on the cob","cake on the tier","fish balls on the stick","steak on the plate"],0],
+["EN","Chong was born on Thursday and Lily was born two days earlier than Chong. Gopal was born three days after Lily. On which day was Gopal born?",["Tuesday","Friday","Saturday","Sunday"],1],
+["EN","I am black and white, but I am not an old TV, I have four legs, and I neigh. Who am I?",["Tapir","Panda","Zebra","Penguin"],2],
+["MATH","Apakah simbol yang sesuai untuk mengisi petak kosong: 58 ▢ 29 = 29?",["+","−","#","(tiada)"],1],
+["MATH","Antara berikut yang manakah merupakan tertib menurun?",["123,103,93,423,533,713","93,103,123,423,533,713","713,533,423,123,103,93","533,423,713,123,93,103"],2],
+["MATH","Antara nombor-nombor dalam gambar rajah, berapa banyakkah nombor ganjil? (14,35,29,49,63,21,7)",["6","5","4","1"],0],
+["MATH","Berikut adalah pasangan nombor bagi 24, kecuali:",["20 dan 2","18 dan 6","10 dan 14","12 dan 12"],0],
+["MATH","6969, ▢, 6961, 6954, 6945 — isikan tempat kosong.",["6964","6963","6960","6965"],0],
+["MATH","Pada pukul berapakah masa yang sesuai untuk sarapan?",["7.00 pagi","3.00 petang","8.00 malam","12.00 tengah hari"],0],
+["MATH","6, 12, M, 24, N, 36 — nilai M + N ialah ____.",["48","42","36","30"],0],
+["MATH","Petak tunggal → 2x2 → 3x3 → ? Apakah petak seterusnya?",["3x3","6x2","4x4","5x4"],2],
+["MATH","Corak segitiga bertitik berulang setiap 3 kotak — pilih kotak seterusnya.",["Garis tegak dengan titik","Diagonal kanan-atas dengan titik","Diagonal kiri-bawah dengan titik","Garis mendatar dengan titik"],2],
+["MATH","5, 10, 20, 40, ▢ — nombor manakah seterusnya dalam corak ini?",["45","60","70","80"],3],
+["MATH","Berapa banyakkah bekas Y (150ml) dan bekas Z (50ml) yang digunakan untuk memenuhi tong air X (1 liter)?",["4 bekas Y dan 4 bekas Z","5 bekas Y dan 3 bekas Z","6 bekas Y dan 2 bekas Z","7 bekas Y dan 1 bekas Z"],2],
+["MATH","Berdasarkan pembaris, berapakah jumlah panjang pensel A (4cm) dan pensel B (3cm)?",["4 cm","7 cm","9 cm","11 cm"],1],
+["MATH","Berapakah beza panjang pensel A dan pensel B?",["1 cm","2 cm","3 cm","5 cm"],0],
+["MATH","Harga sebatang pen ialah RM2.00. Ali mempunyai RM10.00. Berapakah bilangan pen yang dapat dibeli oleh Ali?",["2","5","8","10"],1],
+["MATH","Dalam sebuah pasukan bola baling, ada 7 orang pemain. Berapakah bilangan kasut mereka? (setiap pemain sepasang)",["7","14","10","21"],1],
+["MATH","Hidayah menjual 100 bungkus nasi lemak setiap hari. Berapakah jumlah nasi lemak yang dijual dalam masa 10 hari?",["10","100","1 000","10 000"],2],
+["MATH","Cikgu Muthu mempunyai wang RM150.00. Berapa baki yang diperolehinya jika dia membeli 3 helai seluar (RM45.00 sehelai)?",["RM15.00","RM45.00","RM105.00","RM135.00"],0],
+["MATH","Terdapat dua jalan untuk Adib pulang ke rumah: A terus ke D (18km), atau A ke B (12km), C (14km), D (13km). Berapakah beza jarak kedua-dua laluan?",["20 km","21 km","22 km","39 km"],1],
+["MATH","Harga sebatang pensel ialah 20 sen dan sebatang pembaris 30 sen. Berapakah pensel dan pembaris yang boleh dibeli oleh Nazmi dengan RM1.00 tanpa baki?",["3 pensel dan 3 pembaris","2 pensel dan 3 pembaris","1 pensel dan 2 pembaris","2 pensel dan 2 pembaris"],3],
+["MATH","Adli perlu membayar RM1.05 untuk membeli buku nota. Berapa kepingkah duit syiling 5 sen diperlukan?",["19 keping","21 keping","22 keping","23 keping"],1]
+],
+
+"2024": [
+["BM","Pilih perkataan yang betul ejaannya.",["Terong","Sarong","Jerung","Burong"],0],
+["BM","Pilih perkataan yang betul ejaannya.",["Tenkujuh","Terkujuh","Tengkujuh","Terlunjuh"],2],
+["BM","Pilih perkataan yang salah ejaannya.",["Selipar","Stokin","Seluar","Kasut"],0],
+["BM","Pilih perkataan yang salah ejaannya.",["Kobis","Sawi","Bayam","Kangkung"],0],
+["BM","Pilih perkataan yang salah ejaannya.",["Kere","Monyet","Siamang","Ungka"],0],
+["BM","Pilih perkataan yang salah ejaannya.",["Cantik","Jelita","Inda","Lawa"],2],
+["BM","Pilih perkataan yang salah ejaannya.",["Kakitangan","Tengahari","Olahraga","Antarabangsa"],1],
+["BM","Berani kerana benar, takut kerana ____.",["lelah","kalah","salah","lemah"],2],
+["BM","____ mempunyai maksud yang sama dengan darurat.",["Aman","Bahaya","Makmur","Harmoni"],1],
+["BM","Pandai seperti kancil, manakala rajin seperti ____.",["lipas","lalat","lebah","lipan"],2],
+["BM","Dari hadapan dan belakang disebut sama, kecuali ...",["ketuk","katak","kakak","kacak"],0],
+["BM","Pilih perkataan yang bukan dalam kumpulan yang sama.",["Angsa","Ayam","Itik","Katak"],3],
+["BM","Pilih perkataan yang bukan dalam kumpulan yang sama.",["Kebaya","Kemeja","Kurung","Kebarung"],1],
+["BM","Pilih perkataan yang bukan dalam kumpulan yang sama.",["Kambing","Rusa","Lembu","Harimau"],3],
+["BM","Pilih perkataan yang bukan dalam kumpulan yang sama.",["Bola sepak","Bola baling","Bola jaring","Bola tampar"],0],
+["BM","Pilih perkataan yang bukan dalam kumpulan yang sama.",["Bas","Bot","Van","Lori"],1],
+["BM","Pilih perkataan yang bukan dalam kumpulan yang sama.",["Motor","Rakit","Kayak","Perahu"],0],
+["BM","Pilih perkataan yang bukan dalam kumpulan yang sama.",["Kuih-muih","Sayur-mayur","Lauk-pauk","Anak-pinak"],3],
+["BM","Beku → Cair, ? → Diam",["Sunyi","Bising","Becok","Sepi"],1],
+["BM","Pedas → Cili, Pahit → ?",["Gula","Garam","Peria","Jeruk"],2],
+["BM","Putih → Hitam, Luas → ?",["Lapang","Kecil","Sempit","Ketat"],2],
+["BM","Cawan → Piring, Sudu → ?",["Garpu","Sudip","Camca","Senduk"],0],
+["BM","Petikan: Mula, B C I L K A, Akhir. Bermain dari hadapan: Loncat ke hadapan 2 kali, 1 kali, ke belakang 1 kali, ke hadapan 4 kali, ke belakang 1 kali, loncat 1 kali maju dan berakhir. Apakah hasil perkataan itu?",["CILIK","CICAK","BILIK","BALIK"],2],
+["BM","Tanjak, Songkok, Dastar — semua ini dipakai di ____.",["Kaki","Kepala","Bahu","Badan"],1],
+["BM","Rahman mempunyai tiga orang anak lelaki. Antara berikut, yang manakah bukan anak Rahman?",["Rahim","Razak","Rahimah","Rashid"],2],
+["BM","Petikan: Zaidi sebaya dengan Zul. Adik Zul bernama Zaini yang berusia sepuluh tahun. Zahid sepupu Zaini dan berkawan dengan adik Zul. Zahid dua tahun lebih tua daripada Zaini.\n\nAntara yang berikut, yang manakah paling tepat?",["Zaidi kawan Zahid","Zaini kawan Zaidi","Zul adik Zaini","Zaidi kawan Zul"],3],
+["BM","Berapakah umur Zahid? (rujuk petikan Zaidi/Zul/Zaini)",["9 tahun","11 tahun","12 tahun","13 tahun"],2],
+["BM","Kamil ialah murid darjah dua. Irwan dan Irdina ialah kembar dan sekelas dengan Aminah yang dua tahun lebih tua daripada Kamil. Mereka bertiga belajar dalam kelas apa?",["3 Bestari","6 Dedikasi","4 Cekal","5 Elit"],2],
+["BM","Petikan: Ali, Amat dan Azam adalah ahli kumpulan Merah. Hawa, Huda dan Hana adalah ahli kumpulan Biru. Hawa bertukar kumpulan dengan Ali.\n\nSiapakah ahli kumpulan Merah?",["Ali, Amat dan Azam","Amat, Hawa dan Azam","Hawa, Huda dan Hana","Ali, Hawa dan Huda"],1],
+["BM","Petikan: Ah Meng dan Azril berambut lurus. Borhan dan Siti berambut kerinting. Azril dan Siti berambut hitam.\n\nSiapakah yang berambut perang?",["Ah Meng dan Borhan","Borhan dan Azril","Siti dan Ah Meng","Ah Meng, Azril dan Borhan"],0],
+["EN","Siti ____ eggs to make sandwiches.",["boils","fries","grills","simmer"],0],
+["EN","The dog barks, so the boy ____.",["sits","runs","walks","crawls"],1],
+["EN","We feel ____ when our pet dies.",["angry","excited","joy","sad"],3],
+["EN","Raju kicks the ____ into the net.",["ball","bean","book","bottle"],0],
+["EN","My shirt is wrinkled so I ____ it.",["wash","iron","dry","fold"],1],
+["EN","Falcon → Bird, so Stingray → ?",["Fish","Reptile","Mammal","Amphibian"],0],
+["EN","Kitchen → Ladle, so Garden → ?",["Fork","Plier","Trowel","Hammer"],2],
+["EN","Snake → Reptile, so Butterfly → ?",["Insect","Mammal","Amphibian","Vertebrate"],0],
+["EN","Hockey → Stick, so Kayak → ?",["Bat","Arrow","Racket","Paddle"],3],
+["EN","Rabbit → Burrow, so Mouse → ?",["House","Hole","Hive","Hut"],1],
+["EN","Cap is to head as sock is to ____.",["toe","foot","knee","thigh"],1],
+["EN","Now is November. Three months before is ____.",["June","July","August","September"],2],
+["EN","A ____ is a mammal.",["shark","dolphin","octopus","starfish"],1],
+["EN","Ring is to finger as Bracelet is to ____.",["Ankle","Head","Neck","Wrist"],3],
+["EN","February → Second, so November → ?",["Eighth","Ninth","Tenth","Eleventh"],3],
+["EN","Which of the following is not in the same group?",["Peas","Apple","Broccoli","Eggplant"],1],
+["EN","Snakes hiss while horses ____.",["roar","growl","neigh","squeak"],2],
+["EN","All of the following are worn on the eyes except ...",["braces","goggles","spectacles","sunglasses"],0],
+["EN","If a screw needs a screwdriver, what does a nail need?",["Saw","Drill","Chisel","Hammer"],3],
+["EN","Brave : Coward — Fail : ?",["Slow","Smart","Strong","Succeed"],3],
+["EN","A farmer tends to crops, a dentist tends to ____.",["teeth","body","eyes","feet"],0],
+["EN","I only have blue, yellow and red water colour. If I need to paint oranges, which colours should I mix?",["Red and blue","Red and yellow","Blue and yellow","Yellow only"],1],
+["EN","I bought ten green apples, five red apples and six oranges. I have eaten two green apples, two red apples and all the oranges. How many apples are left?",["Six","Eight","Three","Eleven"],3],
+["EN","An owl says, \"I only speak to creatures that can fly, never to creatures that can swim.\" Which creature could the owl speak to?",["Bat","Fish","Frog","Duck"],0],
+["EN","You are in a garden with closed eyes. Which can help you identify a rose bush nearby?",["The smell of the fragrance","The sound of bees buzzing","The taste of fresh air","The feel of the grass"],0],
+["EN","I've got lumps on my back and live in the desert. What am I?",["Crab","Bison","Camel","Lizard"],2],
+["EN","I can be bitter or sweet, but I'm always a treat, in a bar or a cake, I'm something to eat. What am I?",["Milk","Butter","Sugar","Chocolate"],3],
+["EN","Ali sells bread & cakes, Ah Seng sells vegetables, Raju sells meat & chicken, John sells fresh flowers. Lina wants to buy from the grocer and the butcher. Whose shops should she go to?",["Ali's and John's","Raju's and John's","Ali's and Ah Seng's","Ah Seng's and Raju's"],3],
+["EN","Hani is older than Kim. Kim is older than Ramli. Suzi is older than Hani. Arrange them from oldest to youngest.",["Hani, Ramli, Suzi, Kim","Suzi, Hani, Kim, Ramli","Ramli, Hani, Suzi, Kim","Hani, Suzi, Ramli, Kim"],1],
+["EN","Ingredients: 170g butter, 170g sugar, 170g flour, 3 eggs. Decoration: 200g plain chocolate, 100g sweets. What is the meal?",["Chocolate cake","Chicken curry","Chocolate bar","Chicken pie"],0],
+["MATH","Pasangan nombor berikut menghasilkan nilai tambah 21, kecuali ...",["19 dan 2","9 dan 12","18 dan 3","7 dan 13"],3],
+["MATH","Jika C A R = 6 9 4, maka C A R + R A C = ?",["1 1 9 0","1 3 4 3","1 3 8 8","1 6 5 8"],0],
+["MATH","Segi enam = 55, bulatan = 300. Jika Y + segi enam = bulatan, apakah nilai Y?",["110","150","245","355"],2],
+["MATH","Jika A B C = 4 6 8 maka jumlah kumpulan yang manakah sama dengan 1 1 5 2?",["C A B + B A C B","C A + A B C A C","B + B C A B A C","+ A B C"],1],
+["MATH","Saya berada pada kedudukan 1 hingga 10, sekiranya ditambah 3 akan menjadi 7. Di manakah kedudukan asal saya?",["3","4","7","10"],1],
+["MATH","R E S T = 8 2 3 5. Antara yang berikut, yang manakah menghasilkan nombor paling besar?",["TREE","TEST","TEES","TSEE"],0],
+["MATH","Berapakah bilangan syiling yang terdapat dalam 200 sen?",["3 keping 20 sen + 8 keping 10 sen + 5 keping 5 sen","5 keping 20 sen + 9 keping 10 sen + 2 keping 5 sen","4 keping 20 sen + 7 keping 10 sen + 3 keping 5 sen","2 keping 20 sen + 8 keping 10 sen + 4 keping 5 sen"],1],
+["MATH","2, 6, 18, 54, ▢ — nombor manakah seterusnya dalam corak ini?",["108","150","162","216"],2],
+["MATH","Jika hari ini ialah hari Isnin, apakah hari 100 hari dari sekarang?",["Isnin","Rabu","Khamis","Ahad"],1],
+["MATH","Sebuah kotak mempunyai 3 baris dan 4 lajur bulatan. Berapakah jumlah bulatan dalam kotak itu?",["7","10","12","14"],2],
+["MATH","100, 90, 80, ▢, 60 — nombor manakah seterusnya dalam corak ini?",["65","70","75","50"],1],
+["MATH","2 liter = 4 km, 8 liter = X, 12 liter = 24 km. Berapakah nilai X?",["6 km","8 km","12 km","16 km"],3],
+["MATH","Terdapat 347 buah buku di atas rak. Fan Ling dan Aisyah mengambil 51, Ali mengambil 23, Cikgu Aina memulangkan 11. Berapakah jumlah buku di atas rak?",["262","273","284","347"],2],
+["MATH","Pasukan bola jaring mempunyai 7 orang pemain. Setiap pemain menerima 2 pasang baju dan sepasang kasut. Berapakah jumlah baju mereka?",["2","7","14","21"],2],
+["MATH","Nadhra membeli dua biji bola (RM16) dan satu batang raket (RM26). Berapakah baki wang sekiranya Nadhra membayar dengan RM130?",["RM42","RM46","RM72","RM88"],2],
+["MATH","Rumah ke Pejabat 12km (10 liter). Rumah ke Masjid 6km melalui Pejabat. Berapakah jumlah penggunaan minyak Encik Atan dari rumah ke masjid?",["22 liter","16 liter","18 liter","15 liter"],3],
+["MATH","Harga 2 kg ikan kembung ialah RM8.40. Puan Amelina membeli 5 kg ikan kembung. Berapakah harga yang perlu dibayar?",["RM16.80","RM42.00","RM44.00","RM21.00"],3],
+["MATH","Najla membelanjakan wang saku RM2 sehari. Berapakah jumlah wang yang dibelanjakan dalam tempoh 2 minggu sekiranya dia bersekolah selama 10 hari?",["RM4","RM10","RM14","RM20"],3],
+["MATH","Aziz membaca buku selama dua jam setiap malam kecuali hari Rabu dan Jumaat. Berapa lama masa yang diambil oleh Aziz untuk membaca buku dalam satu minggu?",["180 minit","450 minit","570 minit","600 minit"],3],
+["MATH","Swee Ai mempunyai 5 biji guli. Naqib mempunyai 6 biji guli lebih daripada Swee Ai manakala Aina mempunyai 10 biji guli lebih daripada Naqib. Berapakah jumlah guli semuanya?",["11","16","21","37"],3]
+],
+
+"2025": [
+["BM","Pilih perkataan yang betul ejaannya.",["inda","lawo","cantek","jelita"],3],
+["BM","Pilih perkataan yang betul ejaannya.",["harjai","pujji","samjung","iktiraf"],3],
+["BM","Pilih perkataan yang betul ejaannya.",["gittar","deram","piano","viola"],2],
+["BM","Pilih perkataan yang betul ejaannya.",["ribot","taufam","gelora","badaii"],2],
+["BM","Pilih perkataan yang salah ejaannya.",["jambu","nenas","mangga","durian"],1],
+["BM","Pilih perkataan yang salah ejaannya.",["merah","biru","unggu","kelabu"],2],
+["BM","Pilih perkataan yang salah ejaannya.",["harmoni","teteram","makmur","aman"],1],
+["BM","Pilih perkataan yang salah ejaannya.",["dindeng","tembok","bumbung","atap"],0],
+["BM","Soal mempunyai maksud yang sama dengan ____.",["tanya","jawab","cakap","sebut"],0],
+["BM","____ mempunyai maksud yang sama dengan awal.",["Mula","Akhir","Hujung","Tengah"],0],
+["BM","Pejam adalah lawan celik, manakala tidur adalah lawan ____.",["lena","mimpi","jaga","jegil"],2],
+["BM","Tengkujuh adalah lawan kemarau, manakala surut adalah lawan ____.",["singkat","pasang","kering","banjir"],1],
+["BM","Pilih perkataan yang bukan dalam kumpulan yang sama.",["Cakap","Sebut","Ucap","Dengar"],3],
+["BM","Pilih perkataan yang bukan dalam kumpulan yang sama.",["Gereja","Dewan","Masjid","Kuil"],1],
+["BM","Pilih perkataan yang bukan dalam kumpulan yang sama.",["Tetikus","Monitor","Kekuda","Suis"],2],
+["BM","Pilih perkataan yang bukan dalam kumpulan yang sama.",["Beg","Pensel","Pemadam","Pen"],0],
+["BM","Pilih perkataan yang bukan dalam kumpulan yang sama.",["Konda kondi","Batu seremban","Badminton","Congkak"],2],
+["BM","Pilih perkataan yang bukan dalam kumpulan yang sama.",["Hujan","Panas","Petang","Sejuk"],2],
+["BM","Pilih perkataan yang bukan dalam kumpulan yang sama.",["Lembu","Itik","Arnab","Kucing"],1],
+["BM","Gali → Timbus, Cabut → ?",["Tebang","Tanam","Siram","Kambus"],3],
+["BM","Undur → Mara, Depan → ?",["Atas","Sisi","Tepi","Belakang"],3],
+["BM","Kereta → Darat, Kapal selam → ?",["Sungai","Laut","Tasik","Kolam"],1],
+["BM","Rindu → Benci, Suka → ?",["Sayang","Gembira","Sayu","Duka"],3],
+["BM","Roti → Karbohidrat, Daging → ?",["Vitamin","Protein","Mineral","Pelawas"],1],
+["BM","Mahal → Murah, Lupa → ?",["Ingat","Tahu","Sedar","Faham"],0],
+["BM","Petikan: Puan Siti mempunyai anak bernama Zatul, Zahari dan Zeti. Zeti merupakan anak sulung dalam keluarga. Zatul pula lebih tua daripada Zahari.\n\nBerapakah bilangan anak Puan Siti?",["Dua","Tiga","Empat","Lima"],1],
+["BM","Siapakah nama anak pertama dalam keluarga tersebut?",["Zeti","Zahari","Zatul","Siti"],0],
+["BM","Siapakah nama anak bongsu dalam keluarga tersebut?",["Siti","Zeti","Zatul","Zahari"],3],
+["BM","Petikan: Zaidi dan Zahir berumur 40 tahun. Kamal adalah lima tahun lebih tua daripada Zaidi. Umur Azhar pula muda 5 tahun dari umur Zaidi.\n\nSiapakah lebih tua di antara mereka?",["Zaidi","Kamal","Azhar","Zahir"],1],
+["BM","Siapakah yang sebaya? (rujuk petikan Zaidi/Zahir/Kamal/Azhar)",["Zaidi dan Kamal","Kamal dan Azhar","Azhar dan Zaidi","Zaidi dan Zahir"],3],
+["EN","Hani needs to ____ an essay by today.",["draw","write","paint","sketch"],1],
+["EN","Jenny puts on her ____ before she goes to school.",["bag","hat","skirt","uniform"],3],
+["EN","The word SOUR can be formed from the word ____.",["FAMOUS","JEALOUS","DELICIOUS","NUTRITIOUS"],1],
+["EN","A mango, three ____.",["mangos","mangoes","manggos","mangooes"],1],
+["EN","Choose the opposite meaning to the word given: Huge",["Big","Tiny","Heavy","Light"],1],
+["EN","The first meal of a day is ____.",["supper","dinner","breakfast","lunch"],2],
+["EN","It is hot so I ____.",["sleep","cry","sweat","scream"],2],
+["EN","The girl got dirty so she ____.",["ran fast","ate the pie","went to sleep","took a shower"],3],
+["EN","Happy is to smile as confuse is to ____.",["frown","yawn","laugh","cry"],0],
+["EN","Magic is to trick as comedy is to ____.",["sing","dance","joke","pray"],2],
+["EN","Finger is to hand as toe is to ____.",["foot","eye","ear","nose"],0],
+["EN","Yellow is to corn as green is to ____.",["lettuce","carrot","radish","potato"],0],
+["EN","Falling raindrops shaped like ____.",["teardrops","stars","sphere","triangle"],0],
+["EN","What time is 1300 hours in the 12 hour system?",["1 p.m.","3 p.m.","5 p.m.","7 p.m."],0],
+["EN","Which is not one of the five senses?",["Sight","Smell","Speech","Touch"],2],
+["EN","Today is Sunday. Three days before Sunday is ____.",["Thursday","Saturday","Tuesday","Friday"],0],
+["EN","This musical instrument usually has white and black keys as well as two or more pedals. What is its name?",["Xylophone","Clarinet","Violin","Piano"],3],
+["EN","Mrs Julia uses a ________ to wash her dirty laundry.",["rice cooker","food processor","washing machine","vacuum cleaner"],2],
+["EN","Which of the months have thirty days?",["March, May and June","January, July and August","February, May and December","April, September and November"],3],
+["EN","sunflower → light, so which pair matches?",["torch : battery","scholar : book","wood : fire","ink : print"],0],
+["EN","Rice → Fried rice, so ? → Noodles",["Meat","Dairy","Sugar","Wheat"],3],
+["EN","Blue → Green, so Green → ?",["Purple","Orange","White","Black"],0],
+["EN","Malaysia → Kuala Lumpur Tower, so France → ?",["Pyramid","Eiffel Tower","London Bridge","Colosseum"],1],
+["EN","Tongue → Taste, so Teeth → ?",["Touch","Smell","Hear","Chew"],3],
+["EN","To increase our stamina, we should exercise ____.",["everyday","once yearly","once a week","once a month"],0],
+["EN","In the Venn diagram, 'Sea Creatures' circle contains Prawn, Crab, Shark, X, Seahorse, Octopus, Turtle. What is X?",["Frog","Horse","Starfish","Tortoise"],1],
+["EN","I have no feet, no hands, no wings, but I can reach the sky. What am I?",["Dust","Mist","Water","Smoke"],3],
+["EN","Yesterday, 3 cats gave birth. Kitty: 3 males & 1 female. Comel: 2 males & 3 females. Belang: 1 male & 2 females. How many male and female kittens?",["5 males, 7 females","6 males, 6 females","6 males, 5 females","7 males, 5 females"],1],
+["EN","A farmer has twenty sheep, ten goats and twelve cows. If twelve sheep went missing, how many animals are left?",["Eight","Thirty","Fourty-two","Twenty-two"],1],
+["EN","The word TORN can be formed from the word ____.",["EDUCATION","ASSESSMENT","ENVIRONMENT","ACCOMODATION"],2],
+["MATH","Enam ribu tiga gram ditukarkan kepada kilogram ialah ...",["6.003 kg","60.30 kg","600.3 kg","6 003 kg"],0],
+["MATH","Jika T O P I = 6 9 4 7, maka P I T O = ?",["4 7 6 9","6 7 9 4","7 9 4 6","9 6 4 7"],0],
+["MATH","4:6 = P:18. P = ?",["2","6","8","12"],3],
+["MATH","2/3, x, 6/9 — x = ?",["3/9","4/6","5/8","10/8"],1],
+["MATH","Bulatan=3, segi empat=4, segi tiga=5. Antara berikut, yang manakah sama dengan hasil 16 bahagi 2?",["Bulatan + Segi empat","Segi tiga + Segi empat","Segi tiga + Bulatan","Bulatan + Bulatan"],2],
+["MATH","Jika segi empat = 1, segi empat × hati = 5, hati × segi tiga = 10, segi tiga × heksagon = 6, segi empat × heksagon = ?",["3","4","6","9"],0],
+["MATH","Kek = 50, aiskrim = 35, gula-gula lolli = 15. Antara berikut, yang manakah sama dengan hasil 53 + 27 = 80?",["aiskrim + gula-gula lolli + kek","gula-gula lolli + gula-gula lolli + kek","aiskrim + aiskrim + gula-gula lolli","gula-gula lolli + gula-gula lolli + aiskrim"],1],
+["MATH","3, 6, 12, 24, ▢ — nombor manakah seterusnya dalam corak ini?",["30","36","48","60"],2],
+["MATH","Sebuah bas bertolak pada pukul 8.15 pagi dan sampai 2 jam 30 minit kemudian. Pukul berapakah bas itu sampai?",["10.15 pagi","10.30 pagi","10.45 pagi","11.15 pagi"],1],
+["MATH","1, 4, 9, 16, ▢ — nombor manakah seterusnya dalam corak ini?",["20","23","25","28"],2],
+["MATH","Sebuah petak segi empat tepat mempunyai panjang 8cm dan lebar 5cm. Berapakah perimeternya?",["13cm","18cm","26cm","40cm"],2],
+["MATH","Saya sedang memikirkan dua nombor. Apabila ditambah, jumlahnya 15. Apabila ditolak, jumlahnya 5. Apakah dua nombor tersebut?",["8 dan 7","10 dan 5","11 dan 4","12 dan 3"],1],
+["MATH","Aminah mempunyai 26 biji guli lebih daripada Siew Ling. Siew Ling mempunyai 12 biji guli lebih daripada Lingam. Lingam ada 6 biji guli. Berapakah biji guli Aminah?",["18","32","44","50"],2],
+["MATH","Berat Mei Lan ialah 51 kg, berat Fatimah kurang 4 kg daripada Mei Lan. Berat Rowan pula lebih 8 kg daripada Fatimah. Berat Azlan 5 kg lebih daripada Mei Lan. Siapakah yang paling berat?",["Azlan","Rowan","Fatimah","Mei Lan"],0],
+["MATH","Sebuah kereta memerlukan 2 liter minyak untuk bergerak sejauh 10 km. Berapakah jarak yang dapat dilalui oleh kereta yang mempunyai 11 liter minyak?",["13 km","21 km","22 km","55 km"],3],
+["MATH","Nurul mempunyai wang sebanyak RM9.30. Dia membelanjakan RM2.70 untuk membeli buku. Berapakah baki wang yang dimilikinya?",["RM5.00+RM1.00+RM0.50+RM0.20+RM0.10","RM5.00+RM0.50+RM0.20+RM0.10+RM0.10","RM5.00+RM0.50+RM0.50+RM0.50+RM0.10","RM5.00+RM0.50+RM0.20+RM0.20+RM0.10"],2],
+["MATH","Pak Ali mempunyai RM200.00. Dia membeli tiket bas berjumlah RM86.30. Dia mempunyai dua orang anak. Berapakah baki wang Pak Ali selepas dia memberikan RM2.50 kepada setiap orang anaknya?",["RM108.70","RM111.20","RM113.20","RM195.00"],0],
+["MATH","Imran mengambil masa 2 jam untuk belajar setiap hari. Berapakah masa yang diambil oleh Imran untuk belajar dalam masa dua minggu?",["14 jam","16 jam","20 jam","28 jam"],3],
+["MATH","Harga sebatang pensel ialah RM0.80. Nizam mempunyai RM5.60. Berapakah bilangan pensel yang dapat dibeli oleh Nizam?",["5","6","7","8"],2],
+["MATH","Ibu mengambil masa 23 minit untuk pergi ke pasar. Berapakah masa yang diperlukan oleh ibu untuk pergi dan balik dari pasar selama 4 hari?",["27 minit","46 minit","92 minit","184 minit"],3]
+]
+};
+
+const SEC_NAMES = {BM:"BAHASA MALAYSIA", EN:"ENGLISH", MATH:"MATEMATIK / PENAAKULAN"};
+
+/* =====================================================================
+   APP STATE + LOGIC
+   ===================================================================== */
+let currentPaperKey = null;
+let currentSet = [];
+let currentIndex = 0;
+let userAnswers = []; // index chosen, or null
+let answered = [];    // bool
+
+const screenHome = document.getElementById('screen-home');
+const screenQuiz = document.getElementById('screen-quiz');
+const screenResult = document.getElementById('screen-result');
+const paperGrid = document.getElementById('paper-grid');
+
+function buildHome(){
+  paperGrid.innerHTML = '';
+  Object.keys(PAPERS).forEach(key=>{
+    const card = document.createElement('div');
+    card.className = 'paper-card';
+    card.innerHTML = `
+      <div class="leafdecor">🌿</div>
+      <div class="yr">${key}</div>
+      <div class="sub">Latihan Kendiri IAAT4</div>
+      <div class="qty">${PAPERS[key].length} soalan</div>
+      <div class="best" id="best-${key}"></div>
+    `;
+    card.addEventListener('click', ()=> startPaper(key));
+    paperGrid.appendChild(card);
+  });
+}
+buildHome();
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function generateMockExam(count){
+  // Pool all questions from all papers, tagged with source year
+  let pool = [];
+  Object.keys(PAPERS).forEach(yr=>{
+    PAPERS[yr].forEach(q=> pool.push(q));
+  });
+  // Try to keep roughly proportional section balance (BM/EN/MATH ~ each a third)
+  const bySec = {BM:[], EN:[], MATH:[]};
+  pool.forEach(q=> bySec[q[0]].push(q));
+  Object.keys(bySec).forEach(k=> bySec[k] = shuffle(bySec[k]));
+
+  const perSec = Math.floor(count/3);
+  let remainder = count - perSec*3;
+  let chosen = [];
+  Object.keys(bySec).forEach(k=>{
+    let n = perSec + (remainder>0 ? 1 : 0);
+    if(remainder>0) remainder--;
+    chosen = chosen.concat(bySec[k].slice(0, Math.min(n, bySec[k].length)));
+  });
+  return shuffle(chosen);
+}
+
+document.getElementById('btn-mock').addEventListener('click', ()=>{
+  const count = parseInt(document.getElementById('mock-count').value, 10);
+  currentPaperKey = 'MOCK-' + count;
+  currentSet = generateMockExam(count);
+  currentIndex = 0;
+  userAnswers = new Array(currentSet.length).fill(null);
+  answered = new Array(currentSet.length).fill(false);
+  screenHome.classList.add('hidden');
+  screenResult.classList.add('hidden');
+  screenQuiz.classList.remove('hidden');
+  document.getElementById('live-total').textContent = currentSet.length;
+  renderQuestion();
+});
+
+function startPaper(key){
+  currentPaperKey = key;
+  currentSet = PAPERS[key];
+  currentIndex = 0;
+  userAnswers = new Array(currentSet.length).fill(null);
+  answered = new Array(currentSet.length).fill(false);
+  screenHome.classList.add('hidden');
+  screenResult.classList.add('hidden');
+  screenQuiz.classList.remove('hidden');
+  document.getElementById('live-total').textContent = currentSet.length;
+  renderQuestion();
+}
+
+function scoreSoFar(){
+  let s = 0;
+  currentSet.forEach((q,i)=>{ if(answered[i] && userAnswers[i]===q[3]) s++; });
+  return s;
+}
+
+function renderQuestion(){
+  const q = currentSet[currentIndex];
+  document.getElementById('sec-pill').textContent = SEC_NAMES[q[0]];
+  document.getElementById('sec-pill').className = 'sec-pill sec-' + q[0];
+  document.getElementById('qnum').textContent = `Soalan ${currentIndex+1} / ${currentSet.length}`;
+  document.getElementById('qtext').textContent = q[1];
+  document.getElementById('progress-fill').style.width = ((currentIndex)/currentSet.length*100) + '%';
+  document.getElementById('live-score').textContent = scoreSoFar();
+
+  const optionsEl = document.getElementById('options');
+  optionsEl.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  q[2].forEach((opt, i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.innerHTML = `<span class="opt-letter">${letters[i]}</span><span>${opt}</span>`;
+    btn.addEventListener('click', ()=> selectOption(i));
+    optionsEl.appendChild(btn);
+  });
+
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback';
+  fb.textContent = '';
+
+  document.getElementById('btn-prev').disabled = currentIndex===0;
+  document.getElementById('btn-next').disabled = !answered[currentIndex];
+  document.getElementById('btn-next').textContent = currentIndex===currentSet.length-1 ? 'Selesai 🏁' : 'Seterusnya ➡';
+
+  if(answered[currentIndex]){
+    showAnswerState();
+  }
+}
+
+function selectOption(i){
+  if(answered[currentIndex]) return;
+  userAnswers[currentIndex] = i;
+  answered[currentIndex] = true;
+  showAnswerState();
+  document.getElementById('btn-next').disabled = false;
+  document.getElementById('live-score').textContent = scoreSoFar();
+}
+
+function showAnswerState(){
+  const q = currentSet[currentIndex];
+  const correctIdx = q[3];
+  const chosen = userAnswers[currentIndex];
+  const btns = document.querySelectorAll('#options .opt-btn');
+  btns.forEach((btn,i)=>{
+    btn.classList.add('disabled');
+    if(i===correctIdx) btn.classList.add('correct');
+    if(i===chosen && chosen!==correctIdx) btn.classList.add('wrong');
+    if(i===chosen) btn.classList.add('selected');
+  });
+  const fb = document.getElementById('feedback');
+  fb.classList.add('show');
+  if(chosen===correctIdx){
+    fb.classList.add('good'); fb.classList.remove('bad');
+    fb.textContent = '🎉 Bagus! Jawapan anda betul.';
+  } else {
+    fb.classList.add('bad'); fb.classList.remove('good');
+    fb.textContent = `😊 Jangan risau! Jawapan yang betul ialah "${q[2][correctIdx]}".`;
+  }
+}
+
+document.getElementById('btn-next').addEventListener('click', ()=>{
+  if(currentIndex < currentSet.length-1){
+    currentIndex++;
+    renderQuestion();
+  } else {
+    showResult();
+  }
+});
+document.getElementById('btn-prev').addEventListener('click', ()=>{
+  if(currentIndex>0){ currentIndex--; renderQuestion(); }
+});
+document.getElementById('btn-quit').addEventListener('click', ()=>{
+  screenQuiz.classList.add('hidden');
+  screenResult.classList.add('hidden');
+  screenHome.classList.remove('hidden');
+});
+
+function showResult(){
+  screenQuiz.classList.add('hidden');
+  screenResult.classList.remove('hidden');
+  document.getElementById('review-list').classList.add('hidden');
+  document.getElementById('review-list').innerHTML='';
+
+  const total = currentSet.length;
+  const score = scoreSoFar();
+  document.getElementById('result-score').textContent = score;
+  document.getElementById('result-total').textContent = total;
+
+  let emoji = '🌟', msg = 'Teruskan usaha!';
+  const pct = score/total;
+  if(pct>=0.85){ emoji='🏆'; msg='Cemerlang! Kancil Pintar sejati!'; }
+  else if(pct>=0.7){ emoji='🎉'; msg='Syabas! Sangat baik!'; }
+  else if(pct>=0.5){ emoji='🙂'; msg='Bagus! Sikit lagi lebih baik!'; }
+  else { emoji='💪'; msg='Jangan putus asa, cuba lagi ya!'; }
+  document.getElementById('result-emoji').textContent = emoji;
+  document.getElementById('result-msg').textContent = msg;
+
+  const bySec = {BM:{c:0,t:0}, EN:{c:0,t:0}, MATH:{c:0,t:0}};
+  currentSet.forEach((q,i)=>{
+    bySec[q[0]].t++;
+    if(userAnswers[i]===q[3]) bySec[q[0]].c++;
+  });
+  const barsEl = document.getElementById('result-bars');
+  barsEl.innerHTML = '';
+  Object.keys(bySec).forEach(k=>{
+    const d = document.createElement('div');
+    d.className = 'result-tag';
+    d.innerHTML = `<span class="big">${bySec[k].c}/${bySec[k].t}</span>${SEC_NAMES[k]}`;
+    barsEl.appendChild(d);
+  });
+}
+
+document.getElementById('btn-retry').addEventListener('click', ()=>{
+  if(currentPaperKey && currentPaperKey.startsWith('MOCK-')){
+    const count = parseInt(currentPaperKey.split('-')[1], 10);
+    currentSet = generateMockExam(count);
+    currentIndex = 0;
+    userAnswers = new Array(currentSet.length).fill(null);
+    answered = new Array(currentSet.length).fill(false);
+    screenResult.classList.add('hidden');
+    screenQuiz.classList.remove('hidden');
+    document.getElementById('live-total').textContent = currentSet.length;
+    renderQuestion();
+  } else {
+    startPaper(currentPaperKey);
+  }
+});
+document.getElementById('btn-home').addEventListener('click', ()=>{
+  screenResult.classList.add('hidden');
+  screenHome.classList.remove('hidden');
+});
+document.getElementById('btn-review').addEventListener('click', ()=>{
+  const reviewEl = document.getElementById('review-list');
+  reviewEl.classList.toggle('hidden');
+  if(reviewEl.classList.contains('hidden')) return;
+  reviewEl.innerHTML = '';
+  currentSet.forEach((q,i)=>{
+    const isCorrect = userAnswers[i]===q[3];
+    const div = document.createElement('div');
+    div.className = 'review-item' + (isCorrect ? '' : ' wrong');
+    const chosenText = userAnswers[i]===null ? '(tiada jawapan)' : q[2][userAnswers[i]];
+    div.innerHTML = `
+      <div class="rq">${i+1}. ${q[1]}</div>
+      <div class="ra ${isCorrect?'rightline':'wrongline'}">Jawapan anda: ${chosenText}</div>
+      ${!isCorrect ? `<div class="ra rightline">Jawapan betul: ${q[2][q[3]]}</div>` : ''}
+    `;
+    reviewEl.appendChild(div);
+  });
+});
+</script>
+</body>
+</html>
